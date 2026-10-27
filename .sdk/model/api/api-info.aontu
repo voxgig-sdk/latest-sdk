@@ -1,0 +1,29 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      auth: false
+      contact: {
+        name: "latest@"
+        url: "https://latestat.com/about"
+      }
+      description: `Free, no key, no sign-up. JSON responses allow any origin (CORS). Data refreshes every few hours; responses are cached for up to 10 minutes.
+
+Fields that can be null are marked. In particular \`latest\` is null for products that publish support dates but no version numbers (\`has_versions: false\`), and for the rare product whose versions haven't been fetched yet.
+
+Human-readable docs: https://latestat.com/api Non-JSON endpoints (/feed.xml, /{slug}/feed.xml, /{slug}/eol.ics, /{slug}.csv, /eol.ics, /eol.xml, /eol.csv, /products.csv, /stack/feed.xml, /stack.ics, /stack.csv, /badge/{slug}.svg, /badge/stack.svg) were removed on 2026-10-23: the SDK reads JSON.`
+      servers: [
+        {
+          url: "https://latestat.com"
+        }
+      ]
+      summary: "Latest versions and end-of-life dates for 528 software products."
+      title: "latest@ API"
+      version: "1.0.0"
+      website: "https://latestat.com/api"
+    }
+  }
+}
+

@@ -1,0 +1,22 @@
+# BasicStackFlow
+
+main: kit: flow: BasicStackFlow:
+{
+  entity: "stack",
+  kind: "basic",
+  name: "BasicStackFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "stack_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicStackFlow"
+}

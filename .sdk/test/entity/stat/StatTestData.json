@@ -1,0 +1,27 @@
+{
+  "existing": {
+    "stat": {
+      "STAT00": {
+        "id": "STAT00"
+      },
+      "STAT01": {
+        "id": "STAT01"
+      },
+      "STAT02": {
+        "id": "STAT02"
+      }
+    }
+  },
+  "new": {
+    "stat": {
+      "stat_ref01": {}
+    }
+  },
+  "requests": {
+    "GET /api/stats.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

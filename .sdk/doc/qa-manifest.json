@@ -1,0 +1,23 @@
+{
+  "files": [
+    "SUMMARY.md"
+  ],
+  "config": ".sdk/doc/qa/vale.ini",
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "> Free, no key, no sign-up. JSON responses allow any origin (CORS). Data refreshes every few hours; responses are cached for up to 10 minutes.\n>\n> Fields that can be null are marked. In particular `latest` is null for products that publish support dates but no version numbers (`has_versions: false`), and for the rare product whose versions haven&#39;t been fetched yet.\n>\n> Human-readable docs: https://latestat.com/api Non-JSON endpoints (/feed.xml, /&#123;slug&#125;/feed.xml, /&#123;slug&#125;/eol.ics, /&#123;slug&#125;.csv, /eol.ics, /eol.xml, /eol.csv, /products.csv, /stack/feed.xml, /stack.ics, /stack.csv, /badge/&#123;slug&#125;.svg, /badge/stack.svg) were removed on 2026-10-23: the SDK reads JSON.",
+      "Branch name as used in URLs, for example &quot;8.3&quot;, &quot;22.04&quot;, &quot;2016&quot;.",
+      "End-of-life date, or true/false when the vendor gives no date, or null when unknown.",
+      "False for products tracked by support dates only.",
+      "Newest release in your branch.",
+      "OK",
+      "Paid extended support (ESU, ELS, Ubuntu Pro...).",
+      "Plain-English explanation and what to do.",
+      "Release date of that version.",
+      "Slug, or null when the line was not recognized.",
+      "Still supported, but support ends within 183 days.",
+      "The report on the website."
+    ]
+  }
+}

@@ -1,0 +1,665 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "latest@ API",
+    "version": "1.0.0",
+    "summary": "Latest versions and end-of-life dates for 528 software products.",
+    "description": "Free, no key, no sign-up. JSON responses allow any origin (CORS). Data refreshes every few hours; responses are cached for up to 10 minutes.\n\nFields that can be null are marked. In particular `latest` is null for products that publish support dates but no version numbers (`has_versions: false`), and for the rare product whose versions haven't been fetched yet.\n\nHuman-readable docs: https://latestat.com/api Non-JSON endpoints (/feed.xml, /{slug}/feed.xml, /{slug}/eol.ics, /{slug}.csv, /eol.ics, /eol.xml, /eol.csv, /products.csv, /stack/feed.xml, /stack.ics, /stack.csv, /badge/{slug}.svg, /badge/stack.svg) were removed on 2026-10-23: the SDK reads JSON.",
+    "contact": {
+      "name": "latest@",
+      "url": "https://latestat.com/about"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://latestat.com"
+    }
+  ],
+  "externalDocs": {
+    "description": "API, feeds and badges",
+    "url": "https://latestat.com/api"
+  },
+  "tags": [
+    {
+      "name": "Products",
+      "description": "Versions and support dates"
+    },
+    {
+      "name": "Stack",
+      "description": "Check a list of products and versions at once"
+    },
+    {
+      "name": "Statistics"
+    },
+    {
+      "name": "Feeds",
+      "description": "RSS, calendar (iCalendar) and CSV for any list"
+    },
+    {
+      "name": "Badges"
+    }
+  ],
+  "paths": {
+    "/api/products.json": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "listProducts",
+        "summary": "Every product with its latest version",
+        "parameters": [
+          {
+            "name": "cat",
+            "in": "query",
+            "required": false,
+            "description": "A category: lang, framework, database, server-app, os, app, device, service, standard.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "lang",
+                "framework",
+                "database",
+                "server-app",
+                "os",
+                "app",
+                "device",
+                "service",
+                "standard"
+              ]
+            }
+          },
+          {
+            "name": "p",
+            "in": "query",
+            "required": false,
+            "description": "A hand-picked list of product slugs, comma-separated. Replaces cat.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "php,nodejs,postgresql"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{slug}.json": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "operationId": "getProduct",
+        "summary": "One product: latest version and every branch with its support dates",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Product slug, as in the page URL (latestat.com/php → php).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$"
+            },
+            "example": "php"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stack.json": {
+      "get": {
+        "tags": [
+          "Stack"
+        ],
+        "operationId": "checkStack",
+        "summary": "Check several products and versions: what is out of date or past end of life",
+        "description": "The same report as https://latestat.com/stack. Grade: A all current, B updates waiting, C something on security fixes only or ending within 6 months, F something past end of life.",
+        "parameters": [
+          {
+            "name": "s",
+            "in": "query",
+            "required": true,
+            "description": "Your stack: product:version pairs separated by commas, or \"product version\" lines separated by \";\" or new lines. Pasted command output works too (\"PHP 8.3.4 (cli)\", \"nginx version: nginx/1.24.0\"). Up to 30 lines.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "php:8.3.4,ubuntu:22.04,nginx:1.24.0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StackReport"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing s",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stats.json": {
+      "get": {
+        "tags": [
+          "Statistics"
+        ],
+        "operationId": "getStats",
+        "summary": "End-of-life statistics: dates per year, support windows, longest-supported versions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stats/wordpress-php.json": {
+      "get": {
+        "tags": [
+          "Statistics"
+        ],
+        "operationId": "getWordPressPhpStats",
+        "summary": "WordPress sites by PHP version and support status, with monthly history",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No snapshot yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": [
+          "error",
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ProductList": {
+        "type": "object",
+        "required": [
+          "generated_at",
+          "count",
+          "products"
+        ],
+        "properties": {
+          "generated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "slug",
+                "name",
+                "category",
+                "latest",
+                "has_versions"
+              ],
+              "properties": {
+                "slug": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "latest": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Newest version of the newest released branch. Null when the product has no version numbers (has_versions is false).",
+                  "example": "8.5.10"
+                },
+                "date": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date",
+                  "description": "Release date of that version."
+                },
+                "has_versions": {
+                  "type": "boolean",
+                  "description": "False for products tracked by support dates only (no version numbers), so latest is always null."
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "api": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "required": [
+          "slug",
+          "name",
+          "category",
+          "url",
+          "latest",
+          "has_versions",
+          "cycles"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "latest": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "date": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date"
+                  },
+                  "cycle": {
+                    "type": "string"
+                  }
+                }
+              }
+            ],
+            "description": "The newest release of the newest released branch. Null when no branch has a release yet. version is null when the product has no version numbers."
+          },
+          "has_versions": {
+            "type": "boolean",
+            "description": "False for products tracked by support dates only."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "checked_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Last successful refresh."
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "github.com/owner/repo for products tracked from GitHub releases, else null."
+          },
+          "cycles": {
+            "type": "array",
+            "description": "Branches, newest first.",
+            "items": {
+              "$ref": "#/components/schemas/Cycle"
+            }
+          }
+        }
+      },
+      "Cycle": {
+        "type": "object",
+        "required": [
+          "cycle",
+          "status"
+        ],
+        "properties": {
+          "cycle": {
+            "type": "string",
+            "description": "Branch name as used in URLs, e.g. \"8.3\", \"22.04\", \"2016\"."
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Display name when it differs, e.g. \"22.04 'Jammy Jellyfish' (LTS)\"."
+          },
+          "release_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "latest": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Newest release in this branch."
+          },
+          "latest_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "lts": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "security",
+              "eol",
+              "current",
+              "older",
+              "unknown"
+            ],
+            "description": "active: full support · security: security fixes only · eol: no fixes · current/older: products without support dates (GitHub releases)."
+          },
+          "status_label": {
+            "type": "string",
+            "description": "The vendor's own name for the phase."
+          },
+          "support_until": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "End of active support (then security fixes only)."
+          },
+          "eol": {
+            "type": [
+              "string",
+              "boolean",
+              "null"
+            ],
+            "description": "End-of-life date, or true/false when the vendor gives no date, or null when unknown."
+          },
+          "extended_support_until": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "Paid extended support (ESU, ELS, Ubuntu Pro...)."
+          },
+          "discontinued": {
+            "type": [
+              "string",
+              "boolean",
+              "null"
+            ]
+          },
+          "extra": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "StackReport": {
+        "type": "object",
+        "required": [
+          "grade",
+          "summary",
+          "url",
+          "items"
+        ],
+        "properties": {
+          "grade": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "F",
+              null
+            ],
+            "description": "Null when nothing could be checked."
+          },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "checked": {
+                "type": "integer"
+              },
+              "eol": {
+                "type": "integer"
+              },
+              "behind": {
+                "type": "integer"
+              },
+              "security": {
+                "type": "integer"
+              },
+              "ending": {
+                "type": "integer"
+              },
+              "current": {
+                "type": "integer"
+              },
+              "notfound": {
+                "type": "integer"
+              }
+            }
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The report on the website."
+          },
+          "feed": {
+            "type": "string",
+            "format": "uri",
+            "description": "RSS alerts for this stack."
+          },
+          "items": {
+            "type": "array",
+            "description": "Most urgent first.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "input": {
+                  "type": "string"
+                },
+                "product": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Slug, or null when the line was not recognized."
+                },
+                "version": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "state": {
+                  "type": "string",
+                  "enum": [
+                    "current",
+                    "behind",
+                    "eol",
+                    "ahead",
+                    "unknown",
+                    "invalid",
+                    "noversion",
+                    "notfound"
+                  ]
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Plain-English explanation and what to do."
+                },
+                "branch": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "latest": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Newest release in your branch."
+                },
+                "status": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "active",
+                    "security",
+                    "eol",
+                    "current",
+                    "older",
+                    "unknown",
+                    null
+                  ]
+                },
+                "eol": {
+                  "type": [
+                    "string",
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "ending": {
+                  "type": "boolean",
+                  "description": "Still supported, but support ends within 183 days."
+                },
+                "days_left": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "url": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

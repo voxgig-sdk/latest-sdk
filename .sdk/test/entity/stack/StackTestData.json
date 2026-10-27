@@ -1,0 +1,73 @@
+{
+  "existing": {
+    "stack": {
+      "STACK00": {
+        "branch": "s78",
+        "days_left": "s79",
+        "ending": true,
+        "eol": "s7b",
+        "input": "s7c",
+        "latest": "s7d",
+        "message": "s7e",
+        "product": "s7f",
+        "state": "s80",
+        "status": "s81",
+        "url": "s82",
+        "version": "s83"
+      },
+      "STACK01": {
+        "branch": "sf0",
+        "days_left": "sf1",
+        "ending": true,
+        "eol": "sf3",
+        "input": "sf4",
+        "latest": "sf5",
+        "message": "sf6",
+        "product": "sf7",
+        "state": "sf8",
+        "status": "sf9",
+        "url": "sfa",
+        "version": "sfb"
+      },
+      "STACK02": {
+        "branch": "s168",
+        "days_left": "s169",
+        "ending": true,
+        "eol": "s16b",
+        "input": "s16c",
+        "latest": "s16d",
+        "message": "s16e",
+        "product": "s16f",
+        "state": "s170",
+        "status": "s171",
+        "url": "s172",
+        "version": "s173"
+      }
+    }
+  },
+  "new": {
+    "stack": {
+      "stack_ref01": {
+        "branch": "s1e0",
+        "days_left": "s1e1",
+        "ending": true,
+        "eol": "s1e3",
+        "input": "s1e4",
+        "latest": "s1e5",
+        "message": "s1e6",
+        "product": "s1e7",
+        "state": "s1e8",
+        "status": "s1e9",
+        "url": "s1ea",
+        "version": "s1eb"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/stack.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

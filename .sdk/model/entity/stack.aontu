@@ -1,0 +1,189 @@
+# Entity: stack
+
+main: kit: entity: stack: {
+
+  alias: field: {}
+
+  fields: {
+    branch: {
+      h: "Branch"
+      n: "branch"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    days_left: {
+      h: "Days Left"
+      n: "days_left"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$INTEGER`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    ending: {
+      h: "Ending"
+      n: "ending"
+      r: false
+      sh: "Still supported, but support ends within 183 days."
+      t: "`$BOOLEAN`"
+    }
+    eol: {
+      h: "Eol"
+      n: "eol"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$BOOLEAN`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    input: {
+      h: "Input"
+      n: "input"
+      r: false
+      t: "`$STRING`"
+    }
+    latest: {
+      h: "Latest"
+      n: "latest"
+      r: false
+      sh: "Newest release in your branch."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    message: {
+      h: "Message"
+      n: "message"
+      r: false
+      sh: "Plain-English explanation and what to do."
+      t: "`$STRING`"
+    }
+    product: {
+      h: "Product"
+      n: "product"
+      r: false
+      sh: "Slug, or null when the line was not recognized."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    state: {
+      h: "State"
+      n: "state"
+      r: false
+      t: "`$STRING`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    url: {
+      fo: "uri"
+      h: "Url"
+      n: "url"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    version: {
+      h: "Version"
+      n: "version"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+  }
+
+  name: "stack"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /api/stack.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "php:8.3.4,ubuntu:22.04,nginx:1.24.0"
+                k: "query"
+                n: "s"
+                or: "s"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/stack.json"
+          q: {
+            exist: [
+              "s"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "stack.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

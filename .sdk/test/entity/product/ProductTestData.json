@@ -1,0 +1,110 @@
+{
+  "existing": {
+    "product": {
+      "PRODUCT00": {
+        "api": "sc8",
+        "category": "sc9",
+        "cycle": "sca",
+        "date": "scb",
+        "discontinued": "scc",
+        "eol": "scd",
+        "extended_support_until": "sce",
+        "extra": "scf",
+        "has_versions": true,
+        "label": "sd1",
+        "latest": "sd2",
+        "latest_date": "sd3",
+        "lts": true,
+        "name": "sd5",
+        "release_date": "sd6",
+        "slug": "sd7",
+        "status": "sd8",
+        "status_label": "sd9",
+        "support_until": "sda",
+        "url": "sdb"
+      },
+      "PRODUCT01": {
+        "api": "s190",
+        "category": "s191",
+        "cycle": "s192",
+        "date": "s193",
+        "discontinued": "s194",
+        "eol": "s195",
+        "extended_support_until": "s196",
+        "extra": "s197",
+        "has_versions": true,
+        "label": "s199",
+        "latest": "s19a",
+        "latest_date": "s19b",
+        "lts": true,
+        "name": "s19d",
+        "release_date": "s19e",
+        "slug": "s19f",
+        "status": "s1a0",
+        "status_label": "s1a1",
+        "support_until": "s1a2",
+        "url": "s1a3"
+      },
+      "PRODUCT02": {
+        "api": "s258",
+        "category": "s259",
+        "cycle": "s25a",
+        "date": "s25b",
+        "discontinued": "s25c",
+        "eol": "s25d",
+        "extended_support_until": "s25e",
+        "extra": "s25f",
+        "has_versions": true,
+        "label": "s261",
+        "latest": "s262",
+        "latest_date": "s263",
+        "lts": true,
+        "name": "s265",
+        "release_date": "s266",
+        "slug": "s267",
+        "status": "s268",
+        "status_label": "s269",
+        "support_until": "s26a",
+        "url": "s26b"
+      }
+    }
+  },
+  "new": {
+    "product": {
+      "product_ref01": {
+        "api": "s320",
+        "category": "s321",
+        "cycle": "s322",
+        "date": "s323",
+        "discontinued": "s324",
+        "eol": "s325",
+        "extended_support_until": "s326",
+        "extra": "s327",
+        "has_versions": true,
+        "label": "s329",
+        "latest": "s32a",
+        "latest_date": "s32b",
+        "lts": true,
+        "name": "s32d",
+        "release_date": "s32e",
+        "slug": "s32f",
+        "status": "s330",
+        "status_label": "s331",
+        "support_until": "s332",
+        "url": "s333"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/{slug}.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "GET /api/products.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,318 @@
+# Entity: product
+
+main: kit: entity: product: {
+
+  alias: field: {}
+
+  fields: {
+    api: {
+      fo: "uri"
+      h: "Api"
+      n: "api"
+      r: false
+      t: "`$STRING`"
+    }
+    category: {
+      h: "Category"
+      n: "category"
+      r: true
+      t: "`$STRING`"
+    }
+    cycle: {
+      h: "Cycle"
+      n: "cycle"
+      r: true
+      sh: "Branch name as used in URLs, e.g."
+      t: "`$STRING`"
+    }
+    date: {
+      fo: "date"
+      h: "Date"
+      n: "date"
+      r: false
+      sh: "Release date of that version."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    discontinued: {
+      h: "Discontinued"
+      n: "discontinued"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$BOOLEAN`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    eol: {
+      h: "Eol"
+      n: "eol"
+      r: false
+      sh: "End-of-life date, or true/false when the vendor gives no date, or null when unknown."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$BOOLEAN`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    extended_support_until: {
+      fo: "date"
+      h: "Extended Support Until"
+      n: "extended_support_until"
+      r: false
+      sh: "Paid extended support (ESU, ELS, Ubuntu Pro...)."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    extra: {
+      h: "Extra"
+      n: "extra"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$OBJECT`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    has_versions: {
+      h: "Has Versions"
+      n: "has_versions"
+      r: true
+      sh: "False for products tracked by support dates only (no version numbers), so latest is always null."
+      t: "`$BOOLEAN`"
+    }
+    label: {
+      h: "Label"
+      n: "label"
+      r: false
+      sh: "Display name when it differs, e.g."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    latest: {
+      h: "Latest"
+      n: "latest"
+      op: {
+        list: {
+          req: true
+          type: [
+            "`$ONE`"
+            [
+              "`$STRING`"
+              "`$NULL`"
+            ]
+          ]
+        }
+      }
+      r: false
+      sh: "Newest release in this branch."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    latest_date: {
+      fo: "date"
+      h: "Latest Date"
+      n: "latest_date"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    lts: {
+      h: "Lts"
+      n: "lts"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    name: {
+      h: "Name"
+      n: "name"
+      r: true
+      t: "`$STRING`"
+    }
+    release_date: {
+      fo: "date"
+      h: "Release Date"
+      n: "release_date"
+      r: false
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    slug: {
+      h: "Slug"
+      n: "slug"
+      r: true
+      t: "`$STRING`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: true
+      sh: "active: full support · security: security fixes only · eol: no fixes · current/older: products without support dates (GitHub releases)."
+      t: "`$STRING`"
+    }
+    status_label: {
+      h: "Status Label"
+      n: "status_label"
+      r: false
+      sh: "The vendor's own name for the phase."
+      t: "`$STRING`"
+    }
+    support_until: {
+      fo: "date"
+      h: "Support Until"
+      n: "support_until"
+      r: false
+      sh: "End of active support (then security fixes only)."
+      t: [
+        "`$ONE`"
+        [
+          "`$STRING`"
+          "`$NULL`"
+        ]
+      ]
+    }
+    url: {
+      fo: "uri"
+      h: "Url"
+      n: "url"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "product"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /api/{slug}.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                ex: "php"
+                k: "param"
+                n: "slug"
+                or: "slug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/{slug}.json"
+          q: {
+            exist: [
+              "slug"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "{slug}.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /api/products.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "cat"
+                or: "cat"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "php,nodejs,postgresql"
+                k: "query"
+                n: "p"
+                or: "p"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/products.json"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "products.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.products`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}
